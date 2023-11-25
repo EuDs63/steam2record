@@ -2,6 +2,8 @@ use config::{Config, ConfigError, File};
 
 #[derive(Debug)] 
 pub struct AppConfig {
+    pub enable_api: i64,
+    pub neodb_enable: bool,
     pub neodb_token: String,
 }
 
@@ -11,9 +13,13 @@ impl AppConfig {
             .add_source(File::with_name(file_path))
             .build()?;
         
+        let enable_api:i64 = config.get_int("enable_api")?;
+        let neodb_enable = config.get_bool("neodb_enable")?;
         let neodb_token = config.get_string("neodb_token")?;
 
         Ok(Self {
+            enable_api,
+            neodb_enable,
             neodb_token
         })
     }

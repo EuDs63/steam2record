@@ -1,42 +1,17 @@
-use std::{collections::HashMap};
+use std::collections::HashMap;
 
-use reqwest::{self, Error};
+use reqwest;
 use serde_json::Value;
 use tokio::test;
 
-// let base_url = "https://neodb.social/api/";
-
-// pub async fn search(name: &str) -> Result<String, reqwest::Error> {
-//     let url = format!("https://neodb.social/api/catalog/search?query={}&category=game&page=1", name);
-
-//     let response = reqwest::get(&url).await?;
-
-//     // 检查响应状态码
-//     if response.status().is_success() {
-//         // 解析 JSON 响应
-//         let body: Value = response.text().await?.parse().unwrap();
-        
-//         // 提取 "url" 字段
-//         if let Some(url) = body["data"][0]["url"].as_str() {
-//             return Ok(url.to_string());
-//         } else {
-//             return Err(reqwest::Error::builder()
-//                 .status(reqwest::StatusCode::INTERNAL_SERVER_ERROR)
-//                 .source(Box::new(reqwest::Error::new(reqwest::StatusCode::INTERNAL_SERVER_ERROR, "Could not extract 'url' field from JSON")))
-//                 .build());
-//         }
-//     } else {
-//         return Err(reqwest::Error::builder()
-//             .status(response.status())
-//             .source(Box::new(reqwest::Error::new(response.status(), format!("API Request Failed: {}", response.status()))))
-//             .build());
-//     }
-// }
-
 pub async fn search(name:&str) -> Result<String, reqwest::Error>{
+    // 构造请求url
     let url = format!("https://neodb.social/api/catalog/search?query={}&category=game&page=1", name);
+    // 发送请求
     let body = reqwest::get(&url).await?.text().await?;
+    // 解析请求为json
     let body: Value = body.parse().unwrap();
+    // 尝试获取uuid
     let res = body["data"][0]["uuid"].to_string();
     Ok(res)
 }
@@ -51,17 +26,52 @@ pub async fn mark(uuid: String, token: String, shelf_type: &str) -> Result<Strin
     body.insert("post_to_fediverse", "false");
 
     let client = reqwest::Client::new();
+    // 发送请求
     let res = client
         .post(&url)
         .header("Authorization", authorization_header)
         .json(&body)
         .send()
         .await?;
-
+    // 解析请求为json
     let body = res.text().await?;
     let res:Value = body.parse().unwrap();
     let res = res["message"].to_string();
     Ok(res)
+}
+
+pub async fn operate(name: &str, hours: &str, token: String) -> Result<bool, reqwest::Error> {
+    // 搜索得到uuid
+    let uuid = search(name).await.unwrap();
+
+    //对搜索到的uuid进行判断
+    if uuid == "null" {
+        // 红色字体
+        println!("\x1b[31m{} not found\x1b[0m", name);
+        return Ok(false);
+    } else {
+        // 根据游戏时间进行判断,默认为玩过
+        let mut shelf_type = "complete";
+
+        //无时间数据则判断为想玩
+        if hours.is_empty() {
+            println!("{} hasn't played", name);
+            shelf_type = "wishlist";
+        }
+        //开始标记
+        println!("try to mark {} on neodb ", name);
+        //api_neodb::mark(uuid, config.neodb_token.to_string(), shelf_type).await.unwrap();
+        let result = mark(uuid, token, shelf_type).await.unwrap();
+        if result == "\"OK\"" {
+            // 绿色字体
+            println!("\x1b[32m{} mark on neodb success\x1b[0m", name);
+            return Ok(true);
+        } else {
+            // 红色字体
+            println!("\x1b[31m{} mark on neodb failed\x1b[0m", name);
+            return Ok(false);
+        }
+    }
 }
 
 #[test]

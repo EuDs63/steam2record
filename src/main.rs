@@ -28,35 +28,18 @@ async fn main() -> Result<(), Box<dyn Error>> {
         let record = result.expect("Couldn't get record");
         // 处理 CSV 记录中的数据
         if let (Some(name), Some(hours)) = (record.get(name_index), record.get(hours_index)) {
-            // 搜索得到uuid
-            let uuid = api_neodb::search(name).await.unwrap();
-
-            //对搜索到的uuid进行判断
-            if uuid == "null" {
-                println!("{} not found", name);
-                continue;
-            } else {
-                // 根据游戏时间进行判断,默认为玩过
-                let mut shelf_type = "complete";
-
-                //无时间数据则判断为想玩
-                if hours.is_empty() {
-                    println!("{} hasn't played", name);
-                    shelf_type = "wishlist";
+            match config.enable_api {
+                1 => {
+                    if api_neodb::operate(name, hours, config.neodb_token.to_string()).await.unwrap()  {
+                        count += 1;
+                    }
+                },
+                _ => {
+                    println!("{} played {} hours", name, hours);
                 }
-                //开始标记
-                println!("try to mark {} ", name);
-                //api_neodb::mark(uuid, config.neodb_token.to_string(), shelf_type).await.unwrap();
-                let result = api_neodb::mark(uuid, config.neodb_token.to_string(), shelf_type).await.unwrap();
-                if result == "\"OK\"" {
-                    // 绿色字体
-                    println!("\x1b[32m{} mark success\x1b[0m", name);
-                    count += 1;
-                } else {
-                    // 红色字体
-                    println!("\x1b[31m{} mark failed\x1b[0m", name);
-                }
+                
             }
+
         }
     }
     println!("{} games have been marked", count);
