@@ -85,7 +85,7 @@ async fn test_search_function() {
 #[test]
 async fn test_mark_function(){
     let uuid = "4ZIvmft6PYfyWsZwZWZpAl".to_string();
-    let config = crate::AppConfig::AppConfig::from_file("config.toml").unwrap();
+    let config = crate::app_config::AppConfig::from_file("config.toml").unwrap();
     let token = config.neodb_token;
     let shelf_type = "complete";
     let result = mark(uuid, token, shelf_type).await.unwrap();
