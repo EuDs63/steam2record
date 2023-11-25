@@ -1,10 +1,11 @@
-use std::{error::Error, fs::File};
-
 use csv::ReaderBuilder;
+use std::{error::Error, fs::File};
+use tokio;
 
 mod api_neodb;
 
-fn main() -> Result<(), Box<dyn Error>> {
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
     let csv_path = "steam-library.csv";
 
     let file = File::open(csv_path).expect("Couldn't open file");
@@ -19,16 +20,19 @@ fn main() -> Result<(), Box<dyn Error>> {
     for result in reader.records() {
         let record = result.expect("Couldn't get record");
         // 处理 CSV 记录中的数据
-        if let(Some(name), Some(hours)) = (record.get(name_index), record.get(hours_index)) {
+        if let (Some(name), Some(hours)) = (record.get(name_index), record.get(hours_index)) {
             //判断，无数据则判断为想玩
-            if hours.is_empty(){
+            if hours.is_empty() {
                 println!("{} hasn't played", name);
+                let res_url = api_neodb::search(name).await.unwrap();
+                println!("url is {}", res_url);
                 continue;
             }
             println!("{} played for {} hours", name, hours);
+            let res_url = api_neodb::search(name).await.unwrap();
+            println!("url is {}", res_url);
         }
     }
-
 
     Ok(())
 }
