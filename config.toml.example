@@ -1,2 +1,5 @@
-neodb_enable = true
+neodb_enable = false
 neodb_token = ""
+
+bangumi_enable = false
+bangumi_token = ""
