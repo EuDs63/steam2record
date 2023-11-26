@@ -64,3 +64,5 @@
 - [(2) Error - reqwest json response to get : rust --- (2) 错误 - reqwest json 响应获取：rust](https://www.reddit.com/r/rust/comments/gg98m0/error_reqwest_json_response_to_get/)
 - [wopub/Bilibili2Bangumi: 将 Bilibili 订阅动画迁移至 Bangumi，保留原追番状态并自动点格子。](https://github.com/wopub/Bilibili2Bangumi)
 - [rust项目利用github action 实现自动发布新版本release和crates publish - 知乎](https://zhuanlan.zhihu.com/p/526696611)
+- [Bangumi API](https://bangumi.github.io/api/#/%E6%94%B6%E8%97%8F/postUserCollection)
+- [NeoDB API Developer Console](https://neodb.social/developer/#/default/journal_api_mark_item)
