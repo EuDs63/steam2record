@@ -13,7 +13,7 @@
     cargo build
     cargo run 
     ```
-- 法二：使用编译好的程序,运行截图如下
+- 法二：使用release中已编译好的程序(暂时只支持linux平台),运行截图如下
   ![run](run.jpg)
 
 ## 说明
@@ -47,6 +47,12 @@
     - 解决:
     修改`Cargo.toml`对应内容为：
     `reqwest = { version = "0.11", features = ["json"] }`
+- 发布过程,例:
+    ```bash
+    # 修改CHANGELOG.md
+    git tag -a v0.3.0 -m "尝试自动化发布release"
+    git push origin v0.3.0
+    ```
 
 ## todo
 - [ ] 重构代码：每次循环不应都要重新判断
@@ -57,3 +63,4 @@
 - [Why rust is failing to build command for openssl-sys v0.9.60 even after local installation? - Stack Overflow](https://stackoverflow.com/questions/65553557/why-rust-is-failing-to-build-command-for-openssl-sys-v0-9-60-even-after-local-in)
 - [(2) Error - reqwest json response to get : rust --- (2) 错误 - reqwest json 响应获取：rust](https://www.reddit.com/r/rust/comments/gg98m0/error_reqwest_json_response_to_get/)
 - [wopub/Bilibili2Bangumi: 将 Bilibili 订阅动画迁移至 Bangumi，保留原追番状态并自动点格子。](https://github.com/wopub/Bilibili2Bangumi)
+- [rust项目利用github action 实现自动发布新版本release和crates publish - 知乎](https://zhuanlan.zhihu.com/p/526696611)
