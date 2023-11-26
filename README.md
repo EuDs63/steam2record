@@ -7,6 +7,14 @@
 4. `neodb_token`可参考[NeoDB 获取 Access Token-大大的小蜗牛](https://eallion.com/neodb_token)获取
 5. `bangumi_token`在[个人令牌](https://next.bgm.tv/demo/access-token)获取
 5. 运行
+- 法一：自行编译，运行
+    ```
+    # 请确保有相关运行环境
+    cargo build
+    cargo run 
+    ```
+- 法二：使用编译好的程序,运行截图如下
+  ![run](run.jpg)
 
 ## 说明
 - 程序逻辑如下:
@@ -16,7 +24,8 @@
 - 注意事项
     1. 搜索结果可能不准确
     2. 根据游戏时间判断可能不合理。
-    3. 如介意，请在程序运行结束后检查结果，确保其准确性
+    3. 如对以上结果感到介意，请在程序运行结束后检查结果，确保其准确性
+    4. 默认将标记结果设为公开，如介意，请自行修改代码。
 
 ## 踩坑
 - `failed to run custom build command for openssl-sys v0.9.60`,
@@ -47,3 +56,4 @@
 ## 参考链接
 - [Why rust is failing to build command for openssl-sys v0.9.60 even after local installation? - Stack Overflow](https://stackoverflow.com/questions/65553557/why-rust-is-failing-to-build-command-for-openssl-sys-v0-9-60-even-after-local-in)
 - [(2) Error - reqwest json response to get : rust --- (2) 错误 - reqwest json 响应获取：rust](https://www.reddit.com/r/rust/comments/gg98m0/error_reqwest_json_response_to_get/)
+- [wopub/Bilibili2Bangumi: 将 Bilibili 订阅动画迁移至 Bangumi，保留原追番状态并自动点格子。](https://github.com/wopub/Bilibili2Bangumi)
