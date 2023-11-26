@@ -4,12 +4,19 @@
 1. 使用[Steam library filters](https://www.lorenzostanco.com/lab/steam/)获取csv文件
 2. 重命名为`steam-library.csv`
 3. 修改`config.toml.example`为对应的配置，并重名为`config.toml`
-4. `neodb_token`可参考[NeoDB 获取 Access Token-大大的小蜗牛](https://eallion.com/neodb_token)
+4. `neodb_token`可参考[NeoDB 获取 Access Token-大大的小蜗牛](https://eallion.com/neodb_token)获取
+5. `bangumi_token`在[个人令牌](https://next.bgm.tv/demo/access-token)获取
 5. 运行
 
 ## 说明
-本项目使用搜索功能，默认选择搜索中的第一条结果。所以会出现不匹配的情况，运行完毕后，请对结果进行进一步的检查。
-
+- 程序逻辑如下:
+    1. 从csv文件中读取游戏名
+    2. 搜索游戏名，选择条目中的第一条
+    3. 根据游戏时间进行判断，无时间数据则判断为想玩，有时间数据则判断为玩过。
+- 注意事项
+    1. 搜索结果可能不准确
+    2. 根据游戏时间判断可能不合理。
+    3. 如介意，请在程序运行结束后检查结果，确保其准确性
 
 ## 踩坑
 - `failed to run custom build command for openssl-sys v0.9.60`,
@@ -34,7 +41,7 @@
 
 ## todo
 - [ ] 重构代码：每次循环不应都要重新判断
-- [ ] 支持同步到Bangumi
+- [x] 支持同步到Bangumi
 - [ ] 对搜索结果进行判断，降低不匹配率
 
 ## 参考链接
